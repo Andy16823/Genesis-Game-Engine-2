@@ -22,6 +22,7 @@ public class GameElement {
     private Gravitation Gravitation;
     private GameElemenEvent GameElementListener;
     private Collider Collider;
+    private float Rotation;
 
     public GameElement(String name, BufferedImage texture, Vector2 location, Size2 size, Collider Collider) {
         Name = name;
@@ -32,6 +33,7 @@ public class GameElement {
         Gravitation = new Gravitation(0,0, false, false);
         Enable = true;
         this.Collider = Collider;
+        this.Rotation = 0.0f;
     }
 
     public GameElement(String name, BufferedImage texture, Vector2 location, Size2 size, RenderModes renderMode, GGE.Physik.Gravitation gravitation,  Collider Collider) {
@@ -43,6 +45,7 @@ public class GameElement {
         Gravitation = gravitation;
         Enable = true;
         this.Collider = Collider;
+        this.Rotation = 0.0f;
     }
 
     public String getName() {
@@ -121,14 +124,29 @@ public class GameElement {
         Collider = collider;
     }
 
+    public float getRotation() {
+        return Rotation;
+    }
+
+    public void setRotation(float Rotation) {
+        this.Rotation = Rotation;
+    }
+    
+    
+
     public void renderElement(Graphics2D g2d)
     {
         if(this.Enable)
         {
+            BufferedImage DrawTexture = new BufferedImage(Texture.getWidth(), Texture.getHeight(), BufferedImage.TYPE_INT_ARGB);
+            Graphics2D ImgG2d = DrawTexture.createGraphics();
+            ImgG2d.rotate(Rotation, DrawTexture.getWidth() /2, DrawTexture.getHeight() / 2);
+            ImgG2d.drawImage(Texture, 0, 0, Texture.getWidth(), Texture.getHeight(), null);
+            
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-
-            g2d.drawImage(this.Texture, this.Location.getX(), this.Location.getY(), this.Size.getWidth(), this.Size.getHeight(), null);
+                        
+            g2d.drawImage(DrawTexture, this.Location.getX(), this.Location.getY(), this.Size.getWidth(), this.Size.getHeight(), null);
             if(this.GameElementListener != null)
             {
                 this.GameElementListener.Render(this, g2d);
@@ -158,5 +176,7 @@ public class GameElement {
     {
         return new Rectangle(this.getLocation().getX(), this.getLocation().getY(), this.getSize().getWidth(), this.getSize().getHeight());
     }
+    
+    
 
 }

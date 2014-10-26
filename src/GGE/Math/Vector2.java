@@ -30,4 +30,14 @@ public class Vector2 {
     public void setY(int y) {
         Y = y;
     }
+    
+    public void addX(int Value)
+    {
+        X += Value;
+    }
+    
+    public void addY(int Value)
+    {
+        Y += Value;
+    }
 }
